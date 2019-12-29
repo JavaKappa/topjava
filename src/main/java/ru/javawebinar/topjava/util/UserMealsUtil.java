@@ -3,11 +3,11 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExcess;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
@@ -22,13 +22,37 @@ public class UserMealsUtil {
         );
 
         List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        mealsTo.forEach(System.out::println);
+//        mealsTo.forEach(System.out::println);
 
 //        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         System.out.println("TODO return filtered list with excess. Implement by cycles");
+        //Распределяем каллории по дням
+        Map<LocalDate, Integer> dayAndCalories = new HashMap<>();
+        meals.forEach(m -> {
+            LocalDate day = m.getDateTime().toLocalDate();
+            if (dayAndCalories.containsKey(day)) {
+                int calories = dayAndCalories.get(day) + m.getCalories();
+                dayAndCalories.put(day, calories);
+            } else {
+                dayAndCalories.put(day, m.getCalories());
+            }
+        });
+        //заполняем всеми блюдами со значением exceed
+        List<UserMealWithExcess> userMealWithExcesses = new ArrayList<>();
+        meals.forEach(m -> {
+            if (dayAndCalories.get(m.getDateTime().toLocalDate()) > caloriesPerDay) {
+                userMealWithExcesses.add(new UserMealWithExcess(m, true));
+            } else {
+                userMealWithExcesses.add(new UserMealWithExcess(m, false));
+            }
+        });
+
+        //фильтруем
+       //userMealWithExcesses.removeIf()
+
         return null;
     }
 
