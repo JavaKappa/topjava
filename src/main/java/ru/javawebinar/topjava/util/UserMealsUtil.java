@@ -70,17 +70,10 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         System.out.println("TODO Implement by streams");
         //get UserMeals per day
-        Map<LocalDate, Integer> dayAndCalories = meals.stream().collect(HashMap::new,
-                (map, meal) -> {
-                    LocalDate day = meal.getDateTime().toLocalDate();
-                    if (map.containsKey(day)) {
-                        int calories = map.get(day) + meal.getCalories();
-                        map.put(day, calories);
-                    } else {
-                        map.put(day, meal.getCalories());
-                    }
-                },
-                null);
+        Map<LocalDate, Integer> dayAndCalories = meals.stream().collect(Collectors.toMap(x-> x.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
+        //now convert UserMeals list to UserMealsWithExcess
+
+        System.out.println(dayAndCalories);
         return null;
     }
 
