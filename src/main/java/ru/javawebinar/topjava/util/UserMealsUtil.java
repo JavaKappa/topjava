@@ -28,12 +28,7 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        if (meals.isEmpty()) {
-            System.out.println("return empty list");
-            return Collections.emptyList();
-        }
-        Objects.requireNonNull(startTime);
-        Objects.requireNonNull(endTime);
+        if (check(meals, startTime, endTime)) return new ArrayList<>();
         //Распределяем каллории по дням
         Map<LocalDate, Integer> dayAndCalories = new HashMap<>();
         meals.forEach(m -> {
@@ -56,6 +51,7 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         System.out.println("TODO Implement by streams");
+        if (check(meals, startTime, endTime)) return new ArrayList<>();
         //get UserMeals per day
         Map<LocalDate, Integer> dayAndCalories = meals.stream().collect(Collectors.toMap(x -> x.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
         //now we filter on LocalTime value, then convert UserMeals list to UserMealsWithExcess
@@ -65,5 +61,15 @@ public class UserMealsUtil {
                     LocalDate date = meal.getDateTime().toLocalDate();
                     return new UserMealWithExcess(meal, dayAndCalories.get(date) > caloriesPerDay);
                 }).collect(Collectors.toList());
+    }
+
+    private static boolean check(List<UserMeal> meals, LocalTime startTime, LocalTime endTime) {
+        if (meals.isEmpty()) {
+            System.out.println("return empty list");
+            return true;
+        }
+        Objects.requireNonNull(startTime);
+        Objects.requireNonNull(endTime);
+        return false;
     }
 }
