@@ -31,21 +31,16 @@ public class UserMealsUtil {
         if (check(meals, startTime, endTime)) return new ArrayList<>();
         //Распределяем каллории по дням
         Map<LocalDate, Integer> dayAndCalories = new HashMap<>();
-        meals.forEach(m -> {
-            LocalDate day = m.getDateTime().toLocalDate();
-            if (dayAndCalories.containsKey(day)) {
-                int calories = dayAndCalories.get(day) + m.getCalories();
-                dayAndCalories.put(day, calories);
-            } else {
-                dayAndCalories.put(day, m.getCalories());
+        meals.forEach(m -> dayAndCalories.merge(m.getDateTime().toLocalDate(), m.getCalories(), Integer::sum));
+        //fill userMealWithExceed to return
+        //I add new Constructor in UserMealWithExcess(meal, boolean excess)
+        List<UserMealWithExcess> userMealWithExcesses = new ArrayList<>();
+        meals.forEach(meal -> {
+            if (TimeUtil.isBetweenInclusive(meal.getDateTime().toLocalTime(), startTime, endTime)) {
+                userMealWithExcesses.add(dayAndCalories.get(meal.getDateTime().toLocalDate()) > caloriesPerDay ?
+                        new UserMealWithExcess(meal, true) : new UserMealWithExcess(meal, false));
             }
         });
-        //Filter List<UserMeal> on valid time
-        //Don't forget ask about if we take argument in method can we change him or not! How is right in production?
-        List<UserMeal> mealsClone = new ArrayList<>(meals);
-        mealsClone.removeIf(userMealWithExcess -> !TimeUtil.isBetweenInclusive(userMealWithExcess.getDateTime().toLocalTime(), startTime, endTime));
-        List<UserMealWithExcess> userMealWithExcesses = new ArrayList<>();
-        mealsClone.forEach(m -> userMealWithExcesses.add(dayAndCalories.get(m.getDateTime().toLocalDate()) > caloriesPerDay ? new UserMealWithExcess(m, true) : new UserMealWithExcess(m, false)));
         return userMealWithExcesses;
     }
 
