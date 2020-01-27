@@ -22,49 +22,41 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
+        Date start = new Date();
         List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        Date finish = new Date();
         mealsTo.forEach(System.out::println);
-        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
+        System.out.println("processing " +  (finish.getTime() - start.getTime()) + " ms");
+        Date startStream = new Date();
+        List<UserMealWithExcess> mealsTo1 = filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        Date finishStream = new Date();
+        mealsTo1.forEach(System.out::println);
+        System.out.println("processing " +  (finishStream.getTime() - startStream.getTime()) + " ms");
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        if (check(meals, startTime, endTime)) return new ArrayList<>();
-        //Распределяем каллории по дням
         Map<LocalDate, Integer> dayAndCalories = new HashMap<>();
         meals.forEach(m -> dayAndCalories.merge(m.getDateTime().toLocalDate(), m.getCalories(), Integer::sum));
-        //fill userMealWithExceed to return
-        //I add new Constructor in UserMealWithExcess(meal, boolean excess)
-        List<UserMealWithExcess> userMealWithExcesses = new ArrayList<>();
+        List<UserMealWithExcess> userMealsWithExcesses = new ArrayList<>();
         meals.forEach(meal -> {
             if (TimeUtil.isBetweenInclusive(meal.getDateTime().toLocalTime(), startTime, endTime)) {
-                userMealWithExcesses.add(dayAndCalories.get(meal.getDateTime().toLocalDate()) > caloriesPerDay ?
-                        new UserMealWithExcess(meal, true) : new UserMealWithExcess(meal, false));
+                userMealsWithExcesses.add(convertToUserMealWithExcess(meal, dayAndCalories.get(meal.getDateTime().toLocalDate()) > caloriesPerDay));
             }
         });
-        return userMealWithExcesses;
+        return userMealsWithExcesses;
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        System.out.println("TODO Implement by streams");
-        if (check(meals, startTime, endTime)) return new ArrayList<>();
-        //get UserMeals per day
         Map<LocalDate, Integer> dayAndCalories = meals.stream().collect(Collectors.toMap(x -> x.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
-        //now we filter on LocalTime value, then convert UserMeals list to UserMealsWithExcess
         return meals.stream()
                 .filter(meal -> TimeUtil.isBetweenInclusive(meal.getDateTime().toLocalTime(), startTime, endTime))
                 .map(meal -> {
                     LocalDate date = meal.getDateTime().toLocalDate();
-                    return new UserMealWithExcess(meal, dayAndCalories.get(date) > caloriesPerDay);
-                }).collect(Collectors.toList());
+                    return convertToUserMealWithExcess(meal, dayAndCalories.get(date) > caloriesPerDay);})
+                .collect(Collectors.toList());
     }
 
-    private static boolean check(List<UserMeal> meals, LocalTime startTime, LocalTime endTime) {
-        if (meals.isEmpty()) {
-            System.out.println("return empty list");
-            return true;
-        }
-        Objects.requireNonNull(startTime);
-        Objects.requireNonNull(endTime);
-        return false;
+    public static UserMealWithExcess convertToUserMealWithExcess(UserMeal meal, boolean exceed) {
+        return new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceed);
     }
 }

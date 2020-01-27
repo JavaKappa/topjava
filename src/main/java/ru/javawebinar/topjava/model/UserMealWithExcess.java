@@ -18,13 +18,6 @@ public class UserMealWithExcess {
         this.excess = excess;
     }
 
-    public UserMealWithExcess(UserMeal meal, boolean excess) {
-        this.dateTime = meal.getDateTime();
-        this.description = meal.getDescription();
-        this.calories = meal.getCalories();
-        this.excess = excess;
-    }
-
     public LocalDateTime getDateTime() {
         return dateTime;
     }
