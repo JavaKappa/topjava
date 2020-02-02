@@ -72,7 +72,8 @@ public class UserMealsUtil {
                     ArrayList<UserMealWithExcess> list = new ArrayList<>();
                     meals1.forEach(m -> list.add(convertToUserMealWithExcess(m, exceed)));
                     return list;
-                }).flatMap(Collection::stream)
+                })
+                .flatMap(Collection::stream)
                 .filter((meal -> TimeUtil.isBetweenInclusive(meal.getDateTime().toLocalTime(), startTime, endTime)))
                 .collect(Collectors.toList());
     }
