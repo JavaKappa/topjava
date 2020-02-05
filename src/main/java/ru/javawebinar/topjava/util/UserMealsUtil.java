@@ -28,15 +28,17 @@ public class UserMealsUtil {
         Date finish = new Date();
         mealsTo.forEach(System.out::println);
         System.out.println("processing " +  (finish.getTime() - start.getTime()) + " ms");
+
         Date startStream = new Date();
         List<UserMealWithExcess> mealsTo1 = filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         Date finishStream = new Date();
         mealsTo1.forEach(System.out::println);
         System.out.println("processing " + (finishStream.getTime() - startStream.getTime()) + " ms");
+
         Date startOneStream = new Date();
         List<UserMealWithExcess> mealsTo2 = filteredByStreamsInOneStream(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         Date finishOneStream = new Date();
-        mealsTo1.forEach(System.out::println);
+        mealsTo2.forEach(System.out::println);
         System.out.println("processing " + (finishOneStream.getTime() - startOneStream.getTime()) + " ms");
 
     }
@@ -66,12 +68,12 @@ public class UserMealsUtil {
                 .collect(Collectors.groupingBy(m -> m.getDateTime().toLocalDate()))
                 .values()
                 .stream()
-                .map((Function<List<UserMeal>, List<UserMealWithExcess>>) meals1 -> {
+                .map(meals1 -> {
                     int cal = meals1.stream().mapToInt(UserMeal::getCalories).sum();
                     boolean exceed = cal > caloriesPerDay;
-                    ArrayList<UserMealWithExcess> list = new ArrayList<>();
-                    meals1.forEach(m -> list.add(convertToUserMealWithExcess(m, exceed)));
-                    return list;
+                    return meals1.stream()
+                            .map(meal -> convertToUserMealWithExcess(meal, exceed))
+                            .collect(Collectors.toList());
                 })
                 .flatMap(Collection::stream)
                 .filter((meal -> TimeUtil.isBetweenInclusive(meal.getDateTime().toLocalTime(), startTime, endTime)))
