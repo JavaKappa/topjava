@@ -9,6 +9,8 @@ public class UserMealWithExcess {
 
     private final int calories;
 
+//    private final Supplier<Boolean> excess;
+//    private final AtomicBoolean excess;
     private final boolean excess;
 
     public UserMealWithExcess(LocalDateTime dateTime, String description, int calories, boolean excess) {
@@ -17,6 +19,10 @@ public class UserMealWithExcess {
         this.calories = calories;
         this.excess = excess;
     }
+
+//    public Boolean getExcess() {
+//        return excess.get();
+//    }
 
     @Override
     public String toString() {
