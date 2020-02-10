@@ -19,7 +19,7 @@
         <div><p>Каллорийность: </p><input placeholder="200" name="cal" value="${meal.calories}"></div>
         <%request.setAttribute("meal", request.getAttribute("meal"));%>
         <button type="submit">Сохранить</button>
-        <button type="button">Отмена</button>
+        <button type="button" onclick="history.back()">Отмена</button>
     </form>
 </body>
 </html>

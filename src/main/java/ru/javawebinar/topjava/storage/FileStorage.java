@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileStorage {
+public class FileStorage implements Storage{
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(FileStorage.class);
     private final Path pathToFileStorage;
@@ -38,7 +38,7 @@ public class FileStorage {
         }
     }
 
-    public Meal load(final int id)  {
+    public Meal load(final int id) {
         log.debug("Load meal with id " + id + "from file");
         Path path = null;
         try {
@@ -51,7 +51,7 @@ public class FileStorage {
         } catch (IOException | ClassNotFoundException e) {
             log.error("Can't load meal id " + id, e);
         }
-       log.error("Meal with id " + id + " does not exist");
+        log.error("Meal with id " + id + " does not exist");
         return null;
     }
 
@@ -81,16 +81,6 @@ public class FileStorage {
         return pathToFile.toFile().exists();
     }
 
-    public void update(Meal meal) {
-        log.debug("Updating meal with id " + meal.getId());
-        Path pathToFile = Paths.get(generateFilePath(meal));
-        if (!exist(meal)) {
-            log.error("meal does not exist");
-            throw new IllegalArgumentException("Meal with ID=" + meal.getId() + "does not exist");
-        }
-        pathToFile.toFile().delete();
-        save(meal);
-    }
 
     public void delete(Meal meal) {
         log.debug("Deleting meal with id " + meal.getId());
@@ -101,6 +91,7 @@ public class FileStorage {
         Path path = Paths.get(generateFilePath(meal));
         path.toFile().delete();
     }
+
     public void delete(int id) {
         log.debug("Deleting meal with id " + id);
         Path path = null;
@@ -115,7 +106,12 @@ public class FileStorage {
         path.toFile().delete();
     }
 
-    private Path getPath(int id)  {
+    @Override
+    public void update(Meal meal) {
+        save(meal);
+    }
+
+    private Path getPath(int id) {
         Path path = null;
         try {
             path = Files.walk(pathToFileStorage).filter(f -> f.toFile().getName().equals(String.valueOf(id))).findFirst().orElse(null);
@@ -127,7 +123,6 @@ public class FileStorage {
         }
         return path;
     }
-
 
     public List<Meal> getAllMeals() {
         log.debug("Get all meals from " + pathToFileStorage.toAbsolutePath());
@@ -146,24 +141,5 @@ public class FileStorage {
             log.error("Something with dir", e);
         }
         return meals;
-    }
-
-    public static void main(String[] args) throws Exception {
-        FileStorage fileStorage = new FileStorage("C://123/file_storage");
-        List<Meal> meals = Arrays.asList(
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
-        );
-        meals.forEach(fileStorage::save);
-        List<Meal> mealsAll = fileStorage.getAllMeals();
-
-        meals.forEach(System.out::println);
-        System.out.println("-----------------------------------------");
-        mealsAll.forEach(System.out::println);
     }
 }

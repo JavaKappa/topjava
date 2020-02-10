@@ -3,24 +3,18 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.storage.FileStorage;
+import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
 
-import javax.naming.ldap.ManageReferralControl;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -29,7 +23,7 @@ public class MealServlet extends HttpServlet {
 
     //this is hardcode
     public static final String pathToFileStorage = "C://123/file_storage";
-    private static final FileStorage fileStorage = new FileStorage(pathToFileStorage);
+    private static final Storage storage = new FileStorage(pathToFileStorage);
     private static final LocalTime startTime = LocalTime.MIN;
     private static final LocalTime endTime = LocalTime.MAX;
     private static int caloriesPerDay = 2000;
@@ -44,13 +38,13 @@ public class MealServlet extends HttpServlet {
 
             if (action.equalsIgnoreCase("delete")) {
                 int mealId = Integer.parseInt(req.getParameter("id"));
-                fileStorage.delete(mealId);
+                storage.delete(mealId);
                 req.setAttribute("mealsList", MealsUtil.filteredByStreams(
-                        fileStorage.getAllMeals(), startTime, endTime, caloriesPerDay));
+                        storage.getAllMeals(), startTime, endTime, caloriesPerDay));
                 forward = MEALS_LIST;
             } else if (action.equalsIgnoreCase("edit")) {
                 int mealId = Integer.parseInt(req.getParameter("id"));
-                Meal meal = fileStorage.load(mealId);
+                Meal meal = storage.load(mealId);
                 forward = EDIT_MEAL;
                 req.setAttribute("meal", meal);
                 req.removeAttribute("action");
@@ -65,7 +59,7 @@ public class MealServlet extends HttpServlet {
         }
 
         req.setAttribute("mealsList", MealsUtil.filteredByStreams(
-                fileStorage.getAllMeals(), startTime, endTime, caloriesPerDay));
+                storage.getAllMeals(), startTime, endTime, caloriesPerDay));
         req.getRequestDispatcher(forward).forward(req, resp);
 
     }
@@ -79,13 +73,11 @@ public class MealServlet extends HttpServlet {
         String id = req.getParameter("id");
 
         if (id.isEmpty()) {
-            fileStorage.save(new Meal(date, description, cal));
+            storage.save(new Meal(date, description, cal));
         } else {
-            fileStorage.save(new Meal(Integer.parseInt(id), date, description, cal));
+            storage.update(new Meal(Integer.parseInt(id), date, description, cal));
         }
         resp.sendRedirect("meals");
     }
-
-
 }
 
