@@ -3,6 +3,9 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,9 +13,11 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MealsUtil {
+
     public static void main(String[] args) {
         List<Meal> meals = Arrays.asList(
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
@@ -43,5 +48,19 @@ public class MealsUtil {
 
     private static MealTo createTo(Meal meal, boolean excess) {
         return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+    }
+
+    public static synchronized int generateId(String path) {
+        AtomicInteger id = new AtomicInteger(0);
+        try {
+            while (Files.walk(Paths.get(path)).filter(p-> p.toFile().isFile()).map(f -> f.toFile().getName()).map(Integer::parseInt).anyMatch(i-> i == id.get())) {
+                id.incrementAndGet();
+            }
+            return id.get();
+
+        } catch (IOException e) {
+
+        }
+        return id.get();
     }
 }

@@ -1,22 +1,29 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.MealServlet;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Meal implements Serializable {
-    private static final AtomicInteger ID_CREATOR = new AtomicInteger(0);
-
+    private final long serialVersionUID = 1L;
     private final int ID;
     private LocalDateTime dateTime;
     private String description;
     private int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.ID = ID_CREATOR.getAndIncrement();
+        this.ID = MealsUtil.generateId(MealServlet.pathToFileStorage);
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
+    }
+
+    public Meal(int ID, LocalDateTime dateTime, String description, int calories) {
+        this.ID = ID;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;

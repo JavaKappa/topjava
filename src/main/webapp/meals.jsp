@@ -7,7 +7,7 @@
     <title>Meals List</title>
 </head>
 <body>
-<%--    <%request.getAttribute("ggii")%>--%>
+<a href="meals?action=add"><IMG style="text-align: center" height="100" src="http://s1.iconbird.com/ico/0912/ToolbarIcons/w256h2561346685474SymbolAdd.png"></a>
 <table align="center" border="1" cellpadding="10" cellspacing="0" style="text-align: center">
     <thead>
     <tr>
@@ -25,8 +25,8 @@
             <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
-            <td style="padding: 0px"><a href="*"><img height="50" src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a></td>
-            <td style="padding: 0px"><a href="*"><img height="50" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a></td>
+            <td style="padding: 0px"><a href="meals?action=edit&id=${meal.ID}"><img height="50" src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a></td>
+            <td style="padding: 0px"><a href="meals?action=delete&id=${meal.ID}"><img height="50" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a></td>
         </tr>
         </c:if>
         <c:if test="${!meal.excess}">
@@ -35,7 +35,7 @@
                 <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td style="padding: 0px"><a href=""><img height="50" src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a></td>
+                <td style="padding: 0px"><a href="meals?action=edit&id=${meal.ID}"><img height="50" src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a></td>
                 <td style="padding: 0px"><a href="meals?action=delete&id=${meal.ID}"><img height="50" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a></td>
             </tr>
         </c:if>

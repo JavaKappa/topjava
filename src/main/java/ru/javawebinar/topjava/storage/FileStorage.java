@@ -38,15 +38,21 @@ public class FileStorage {
         }
     }
 
-    public Meal load(final int id) throws Exception {
+    public Meal load(final int id)  {
         log.debug("Load meal with id " + id + "from file");
-        Path path = getPath(id);
+        Path path = null;
+        try {
+            path = getPath(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(path.toString()))) {
             return (Meal) is.readObject();
         } catch (IOException | ClassNotFoundException e) {
             log.error("Can't load meal id " + id, e);
         }
-        throw new Exception("Meal with id " + id + " does not exist");
+       log.error("Meal with id " + id + " does not exist");
+        return null;
     }
 
     public Meal load(final Meal meal) throws Exception {
@@ -109,11 +115,15 @@ public class FileStorage {
         path.toFile().delete();
     }
 
-    private Path getPath(int id) throws Exception {
-        Path path = Files.walk(pathToFileStorage).filter(f -> f.toFile().getName().equals(String.valueOf(id))).findFirst().orElse(null);
+    private Path getPath(int id)  {
+        Path path = null;
+        try {
+            path = Files.walk(pathToFileStorage).filter(f -> f.toFile().getName().equals(String.valueOf(id))).findFirst().orElse(null);
+        } catch (IOException e) {
+            log.error("file error", e);
+        }
         if (path == null) {
             log.error("Can't load meal id " + id);
-            throw new Exception("Meal with id " + id + " does not exist");
         }
         return path;
     }
@@ -152,10 +162,8 @@ public class FileStorage {
         meals.forEach(fileStorage::save);
         List<Meal> mealsAll = fileStorage.getAllMeals();
 
-        mealsAll.forEach(System.out::println);
-        mealsAll.get(0).setDescription("xyz");
-        fileStorage.update(mealsAll.get(0));
-        mealsAll = fileStorage.getAllMeals();
+        meals.forEach(System.out::println);
+        System.out.println("-----------------------------------------");
         mealsAll.forEach(System.out::println);
     }
 }
