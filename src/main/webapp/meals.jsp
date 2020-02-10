@@ -14,6 +14,7 @@
         <th>Дата/Время</th>
         <th>Описание</th>
         <th>Калории</th>
+        <th colspan="2">Действия</th>
     </tr>
     </thead>
     <c:forEach items="${mealsList}" var="meal">
@@ -24,6 +25,8 @@
             <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
+            <td style="padding: 0px"><a href="*"><img height="50" src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a></td>
+            <td style="padding: 0px"><a href="*"><img height="50" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a></td>
         </tr>
         </c:if>
         <c:if test="${!meal.excess}">
@@ -32,6 +35,8 @@
                 <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
+                <td style="padding: 0px"><a href=""><img height="50" src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a></td>
+                <td style="padding: 0px"><a href="meals?action=delete&id=${meal.ID}"><img height="50" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a></td>
             </tr>
         </c:if>
     </c:forEach>

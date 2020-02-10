@@ -19,11 +19,11 @@ public class FileStorage {
     private static final Logger log = LoggerFactory.getLogger(FileStorage.class);
     private final Path pathToFileStorage;
 
-    public FileStorage(String path) throws Exception {
+    public FileStorage(String path) {
         Path pathToStorage = Paths.get(path);
         if (!pathToStorage.toFile().exists()) {
             if (!pathToStorage.toFile().mkdirs()) {
-                throw new Exception("Cant create " + pathToStorage);
+                log.error("Cant create " + pathToStorage);
             }
         }
         pathToFileStorage = Paths.get(path);
@@ -40,12 +40,7 @@ public class FileStorage {
 
     public Meal load(final int id) throws Exception {
         log.debug("Load meal with id " + id + "from file");
-        Path path = Files.walk(pathToFileStorage).filter(f -> f.toFile().getName().equals(String.valueOf(id))).findFirst().orElse(null);
-        if (path == null) {
-            log.error("Can't load meal id " + id);
-            throw new Exception("Meal with id " + id + " does not exist");
-
-        }
+        Path path = getPath(id);
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(path.toString()))) {
             return (Meal) is.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -56,7 +51,7 @@ public class FileStorage {
 
     public Meal load(final Meal meal) throws Exception {
         log.debug("Load meal with id " + meal.getId() + "from file");
-        Path path = Paths.get(generateFilePath(meal));
+        Path path = getPath(meal.getId());
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(path.toString()))) {
             return (Meal) is.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -100,6 +95,29 @@ public class FileStorage {
         Path path = Paths.get(generateFilePath(meal));
         path.toFile().delete();
     }
+    public void delete(int id) {
+        log.debug("Deleting meal with id " + id);
+        Path path = null;
+        try {
+            path = getPath(id);
+        } catch (Exception e) {
+            log.error("deleting error", e);
+        }
+        if (!path.toFile().exists()) {
+            log.error("ID " + id + " does not exist");
+        }
+        path.toFile().delete();
+    }
+
+    private Path getPath(int id) throws Exception {
+        Path path = Files.walk(pathToFileStorage).filter(f -> f.toFile().getName().equals(String.valueOf(id))).findFirst().orElse(null);
+        if (path == null) {
+            log.error("Can't load meal id " + id);
+            throw new Exception("Meal with id " + id + " does not exist");
+        }
+        return path;
+    }
+
 
     public List<Meal> getAllMeals() {
         log.debug("Get all meals from " + pathToFileStorage.toAbsolutePath());
