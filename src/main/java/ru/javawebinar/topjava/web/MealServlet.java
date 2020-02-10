@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -32,6 +33,7 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.debug("redirect to meals");
+        req.setCharacterEncoding("UTF-8");
         String forward = "";
         String action = req.getParameter("action");
         if (action != null) {
@@ -67,7 +69,7 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String stringDate = req.getParameter("date");
-        LocalDateTime date = TimeUtil.parseFromString(stringDate);
+        LocalDateTime date = LocalDateTime.parse(stringDate);
         String description = req.getParameter("description");
         int cal = Integer.parseInt(req.getParameter("cal"));
         String id = req.getParameter("id");

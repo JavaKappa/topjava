@@ -108,6 +108,7 @@ public class FileStorage implements Storage{
 
     @Override
     public void update(Meal meal) {
+        delete(meal.getId());
         save(meal);
     }
 
