@@ -49,4 +49,18 @@ public class MealsUtil {
     private static MealTo createTo(Meal meal, boolean excess) {
         return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
+
+    public static synchronized int generateId(String path) {
+        AtomicInteger id = new AtomicInteger(0);
+        try {
+            while (Files.walk(Paths.get(path)).filter(p-> p.toFile().isFile()).map(f -> f.toFile().getName()).map(Integer::parseInt).anyMatch(i-> i == id.get())) {
+                id.incrementAndGet();
+            }
+            return id.get();
+
+        } catch (IOException e) {
+
+        }
+        return id.get();
+    }
 }

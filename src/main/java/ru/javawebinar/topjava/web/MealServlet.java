@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.storage.MapStorage;
+import ru.javawebinar.topjava.storage.FileStorage;
 import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -22,7 +22,9 @@ public class MealServlet extends HttpServlet {
     private static final String EDIT_MEAL = "update.jsp";
     private static AtomicInteger id = new AtomicInteger(0);
 
-    private static final Storage storage = new MapStorage();
+    //hard Code
+    public static final String pathToFileStorage = "C://123/file_storage";
+    private static final Storage storage = new FileStorage(pathToFileStorage);
     private static final LocalTime startTime = LocalTime.MIN;
     private static final LocalTime endTime = LocalTime.MAX;
     private static int caloriesPerDay = 2000;
@@ -75,7 +77,7 @@ public class MealServlet extends HttpServlet {
 
         Meal meal = new Meal(id.getAndIncrement(), date, description, cal);
         if (rawId.isEmpty()) {
-            storage.save(new Meal(id.getAndIncrement(),date, description, cal));
+            storage.save(new Meal(id.getAndIncrement(), date, description, cal));
         } else {
             storage.update(new Meal(Integer.parseInt(rawId), date, description, cal));
         }

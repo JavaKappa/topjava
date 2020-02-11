@@ -21,6 +21,13 @@ public class Meal implements Serializable {
         this.description = description;
         this.calories = calories;
     }
+    public Meal(LocalDateTime dateTime, String description, int calories) {
+        this.ID = MealsUtil.generateId(MealServlet.pathToFileStorage);
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
+    }
+
 
     public int getId() {
         return ID;
