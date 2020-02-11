@@ -16,11 +16,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private static final String MEALS_LIST = "meals.jsp";
     private static final String EDIT_MEAL = "update.jsp";
+    private static AtomicInteger id = new AtomicInteger(0);
 
     //this is hardcode
     public static final String pathToFileStorage = "C://123/file_storage";
@@ -69,16 +71,17 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        String rawId = req.getParameter("id");
         String stringDate = req.getParameter("date");
         LocalDateTime date = LocalDateTime.parse(stringDate);
         String description = req.getParameter("description");
         int cal = Integer.parseInt(req.getParameter("cal"));
-        String id = req.getParameter("id");
 
-        if (id.isEmpty()) {
-            storage.save(new Meal(date, description, cal));
+        Meal meal = new Meal(id.getAndIncrement(), date, description, cal);
+        if (rawId.isEmpty()) {
+            storage.save(new Meal(id.getAndIncrement(),date, description, cal));
         } else {
-            storage.update(new Meal(Integer.parseInt(id), date, description, cal));
+            storage.update(new Meal(Integer.parseInt(rawId), date, description, cal));
         }
         resp.sendRedirect("meals");
     }

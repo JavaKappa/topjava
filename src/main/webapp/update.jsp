@@ -13,11 +13,10 @@
 <body>
     <p>Update Meal</p>
     <form action="meals" method="post">
-        <p>ID:</p><input readonly name="id" value="${meal.id}">
+        <p>ID</p> <input readonly name="id" value="${meal.id}">
         <div><p>Дата время: </p><input type="datetime-local" placeholder="2020-01-01 23:33" name="date" value="${meal.dateTime}"></div>
         <div><p>Описание: </p><input placeholder="Торт" name="description" value="${meal.description}"></div>
         <div><p>Каллорийность: </p><input placeholder="200" name="cal" value="${meal.calories}"></div>
-        <%request.setAttribute("meal", request.getAttribute("meal"));%>
         <button type="submit">Сохранить</button>
         <button type="button" onclick="history.back()">Отмена</button>
     </form>

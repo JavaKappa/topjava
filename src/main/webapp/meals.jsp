@@ -12,6 +12,7 @@
 <table align="center" border="1" cellpadding="10" cellspacing="0" style="text-align: center">
     <thead>
     <tr>
+        <th>ID</th>
         <th>Дата/Время</th>
         <th>Описание</th>
         <th>Калории</th>
@@ -24,6 +25,7 @@
             <c:when test="${meal.excess}">
                 <tr style="color: red;
                     background: #ffeddd">
+                    <td>${meal.ID}</td>
                     <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
@@ -38,6 +40,7 @@
             <c:otherwise>
                 <tr style="color: green;
                         background: #dfffd0">
+                    <td>${meal.ID}</td>
                     <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>

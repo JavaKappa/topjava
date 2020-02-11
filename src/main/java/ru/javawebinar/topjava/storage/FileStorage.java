@@ -8,10 +8,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FileStorage implements Storage{
@@ -53,6 +50,17 @@ public class FileStorage implements Storage{
         }
         log.error("Meal with id " + id + " does not exist");
         return null;
+    }
+
+    @Override
+    public boolean isContainMeal(int id) {
+        try {
+            return Files.walk(pathToFileStorage).filter(f-> f.toFile().isFile())
+                    .anyMatch(f -> Integer.parseInt(f.toFile().getName()) == id);
+        } catch (IOException e) {
+            log.error("directory exception", e);
+        }
+        return false;
     }
 
     public Meal load(final Meal meal) throws Exception {

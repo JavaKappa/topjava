@@ -14,5 +14,7 @@ public interface Storage {
 
     Meal load(int id);
 
+    boolean isContainMeal(int id);
+
     List<Meal> getAllMeals();
 }
