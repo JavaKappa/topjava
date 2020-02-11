@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.storage.FileStorage;
+import ru.javawebinar.topjava.storage.MapStorage;
 import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
@@ -25,8 +26,9 @@ public class MealServlet extends HttpServlet {
     private static AtomicInteger id = new AtomicInteger(0);
 
     //this is hardcode
-    public static final String pathToFileStorage = "C://123/file_storage";
-    private static final Storage storage = new FileStorage(pathToFileStorage);
+//    public static final String pathToFileStorage = "C://123/file_storage";
+    //    private static final Storage storage = new FileStorage(pathToFileStorage);
+    private static final Storage storage = new MapStorage();
     private static final LocalTime startTime = LocalTime.MIN;
     private static final LocalTime endTime = LocalTime.MAX;
     private static int caloriesPerDay = 2000;
