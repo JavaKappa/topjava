@@ -5,6 +5,17 @@
 <html>
 <head>
     <title>Meals List</title>
+    <style>
+        .normal {
+            color: green;
+            background: #dfffd0
+        }
+
+        .exceed {
+            color: red;
+            background: #ffeddd
+        }
+    </style>
 </head>
 <body>
 <a href="meals?action=add"><IMG style="text-align: center" height="100"
@@ -21,38 +32,18 @@
     </thead>
     <c:forEach items="${mealsList}" var="meal">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
-        <c:choose>
-            <c:when test="${meal.excess}">
-                <tr style="color: red;
-                    background: #ffeddd">
-                    <td>${meal.ID}</td>
-                    <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
-                    <td>${meal.description}</td>
-                    <td>${meal.calories}</td>
-                    <td style="padding: 0px"><a href="meals?action=edit&id=${meal.ID}"><img height="50"
-                                                                                            src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a>
-                    </td>
-                    <td style="padding: 0px"><a href="meals?action=delete&id=${meal.ID}"><img height="50"
-                                                                                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a>
-                    </td>
-                </tr>
-            </c:when>
-            <c:otherwise>
-                <tr style="color: green;
-                        background: #dfffd0">
-                    <td>${meal.ID}</td>
-                    <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
-                    <td>${meal.description}</td>
-                    <td>${meal.calories}</td>
-                    <td style="padding: 0px"><a href="meals?action=edit&id=${meal.ID}"><img height="50"
-                                                                                            src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a>
-                    </td>
-                    <td style="padding: 0px"><a href="meals?action=delete&id=${meal.ID}"><img height="50"
-                                                                                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a>
-                    </td>
-                </tr>
-            </c:otherwise>
-        </c:choose>
+        <tr class="${meal.excess?'exceed':'normal'}">
+            <td>${meal.ID}</td>
+            <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+            <td style="padding: 0px"><a href="meals?action=edit&id=${meal.ID}"><img height="50"
+                                                                                    src="https://pngimage.net/wp-content/uploads/2018/05/edit-png-image-4.png"></a>
+            </td>
+            <td style="padding: 0px"><a href="meals?action=delete&id=${meal.ID}"><img height="50"
+                                                                                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Symbol_speedy_delete_vote.svg/180px-Symbol_speedy_delete_vote.svg.png"></a>
+            </td>
+        </tr>
     </c:forEach>
 </table>
 </body>

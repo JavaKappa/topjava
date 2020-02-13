@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.storage.MapStorage;
+import ru.javawebinar.topjava.storage.MealMapStorage;
 import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -22,10 +22,14 @@ public class MealServlet extends HttpServlet {
     private static final String EDIT_MEAL = "update.jsp";
     private static AtomicInteger id = new AtomicInteger(0);
 
-    private static final Storage storage = new MapStorage();
     private static final LocalTime startTime = LocalTime.MIN;
+    private final Storage storage;
     private static final LocalTime endTime = LocalTime.MAX;
     private static int caloriesPerDay = 2000;
+
+    public MealServlet() {
+        storage = new MealMapStorage();
+    }
 
 
     @Override
@@ -49,17 +53,14 @@ public class MealServlet extends HttpServlet {
                 req.setAttribute("meal", meal);
                 req.removeAttribute("action");
                 req.removeAttribute("id");
-//                req.getRequestDispatcher(forward).forward(req, resp);
-
             } else if (action.equalsIgnoreCase("add")) {
                 forward = EDIT_MEAL;
             }
         } else {
+            req.setAttribute("mealsList", MealsUtil.filteredByStreams(
+                    storage.getAllMeals(), startTime, endTime, caloriesPerDay));
             forward = MEALS_LIST;
         }
-
-        req.setAttribute("mealsList", MealsUtil.filteredByStreams(
-                storage.getAllMeals(), startTime, endTime, caloriesPerDay));
         req.getRequestDispatcher(forward).forward(req, resp);
 
     }
@@ -73,9 +74,8 @@ public class MealServlet extends HttpServlet {
         String description = req.getParameter("description");
         int cal = Integer.parseInt(req.getParameter("cal"));
 
-        Meal meal = new Meal(id.getAndIncrement(), date, description, cal);
         if (rawId.isEmpty()) {
-            storage.save(new Meal(id.getAndIncrement(),date, description, cal));
+            storage.save(new Meal(id.getAndIncrement(), date, description, cal));
         } else {
             storage.update(new Meal(Integer.parseInt(rawId), date, description, cal));
         }

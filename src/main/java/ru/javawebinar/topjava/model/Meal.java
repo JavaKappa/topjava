@@ -1,8 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.MealServlet;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,16 +43,6 @@ public class Meal implements Serializable {
         return dateTime.toLocalTime();
     }
 
-    @Override
-    public String toString() {
-        return "Meal{" +
-                "ID=" + ID +
-                ", dateTime=" + dateTime +
-                ", description='" + description + '\'' +
-                ", calories=" + calories +
-                '}';
-    }
-
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
@@ -66,5 +53,15 @@ public class Meal implements Serializable {
 
     public void setCalories(int calories) {
         this.calories = calories;
+    }
+
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "ID=" + ID +
+                ", dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", calories=" + calories +
+                '}';
     }
 }

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MapStorage implements Storage {
-    private static final Logger log = LoggerFactory.getLogger(MapStorage.class);
+public class MealMapStorage implements Storage {
+    private static final Logger log = LoggerFactory.getLogger(MealMapStorage.class);
     private ConcurrentHashMap<Integer, Meal> storage = new ConcurrentHashMap<>();
 
     @Override
