@@ -1,4 +1,5 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="ru.javawebinar.topjava.util.DateTimeUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -34,7 +35,7 @@
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
         <tr class="${meal.excess?'exceed':'normal'}">
             <td>${meal.ID}</td>
-            <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
+            <td><%=DateTimeUtil.toString(meal.getDateTime())%></td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             <td style="padding: 0px"><a href="meals?action=edit&id=${meal.ID}"><img height="50"

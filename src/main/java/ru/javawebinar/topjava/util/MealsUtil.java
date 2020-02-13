@@ -3,9 +3,6 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,7 +10,6 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MealsUtil {
@@ -40,7 +36,7 @@ public class MealsUtil {
                 );
 
         return meals.stream()
-                .filter(meal -> TimeUtil.isBetweenInclusive(meal.getTime(), startTime, endTime))
+                .filter(meal -> DateTimeUtil.isBetweenInclusive(meal.getTime(), startTime, endTime))
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
