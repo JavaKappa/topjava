@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +19,9 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Meal save(int userId, Meal meal) {
         log.debug(String.format("Save meal %s to user with id %d", meal.getDescription(), userId));
+        repository.computeIfAbsent(userId,ConcurrentHashMap::new);
         Map<Integer, Meal> userMeals = repository.get(userId);
+
         if (meal.isNew()) {
             meal.setId(counter.getAndIncrement());
             userMeals.put(meal.getId(), meal);
@@ -33,27 +34,21 @@ public class InMemoryMealRepository implements MealRepository {
     public boolean delete(int userId, int id) {
         log.debug(String.format("delete meal with id %d from user with id %d", id, userId));
         Map<Integer, Meal> userMeals = repository.get(userId);
-        if (userMeals.remove(id) == null) {
-            throw new NotFoundException(String.format("meal with id %s does not exist in user meals with id + %s", id, userId));
-        }
-        return true;
+
+        return userMeals.remove(id) != null;
     }
 
     @Override
     public Meal get(int userId, int id) {
         log.debug(String.format("geting meal with id %d from User with id %d", id, userId));
         Map<Integer, Meal> userMeals = repository.get(userId);
-        Meal meal = userMeals.get(id);
-        if (meal == null) {
-            log.error("meal with id %d at user with id %d does not exist");
-            throw new NotFoundException(String.format("meal with id %d at user with id %d does not exist", id, userId));
-        }
-        return meal;
+        return userMeals.get(id);
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
-        return repository.get(userId).values()
+    public List<Meal> getAll(int userId) {
+        Map<Integer, Meal> userMeals = repository.get(userId);
+        return userMeals == null? Collections.emptyList() : userMeals.values()
                 .stream()
                 .sorted(Comparator.comparing(Meal::getDate).reversed())
                 .collect(Collectors.toList());

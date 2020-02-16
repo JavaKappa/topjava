@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.UserUtil;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,10 +24,11 @@ public class InMemoryUserRepository implements UserRepository {
 
     public boolean delete(int id) {
         log.info("delete {}", id);
-        if (repository.remove(id) == null) {
-            throw new NotFoundException("User with id " + id + " does not exist");
-        }
-        return true;
+//        if (repository.remove(id) == null) {
+//            throw new NotFoundException("User with id " + id + " does not exist");
+//        }
+//        return true;
+        return repository.remove(id) != null;
     }
 
     @Override
@@ -46,11 +45,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User get(int id) {
         log.info("get {}", id);
-        User u = repository.get(id);
-        if (u == null) {
-            throw new NotFoundException("User does not exist, id  = " + id);
-        }
-        return u;
+        return repository.get(id);
     }
 
     @Override
@@ -64,10 +59,8 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        User user = repository.values().stream()
+        return repository.values().stream()
                 .filter(u -> u.getEmail().equalsIgnoreCase(email))
                 .findAny().orElse(null);
-        if (user == null) throw new NotFoundException("User with email " + email + " does not found");
-        return user;
     }
 }
