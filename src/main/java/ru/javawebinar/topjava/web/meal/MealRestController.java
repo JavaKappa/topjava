@@ -9,6 +9,8 @@ import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
@@ -40,10 +42,15 @@ public class MealRestController {
         service.delete(SecurityUtil.authUserId(), id);
     }
 
+
     public Meal create(Meal meal) {
         log.debug("create meal " + meal);
         checkNew(meal);
         return service.create(SecurityUtil.authUserId(), meal);
+    }
+
+    public Meal create() {
+        return new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
     }
 
     public void update(Meal meal) {

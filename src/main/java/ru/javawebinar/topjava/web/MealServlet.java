@@ -65,11 +65,11 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
                 break;
             case "create":
+                request.setAttribute("meal", mealRestController.create());
+                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
             case "update":
-                final Meal meal = "create".equals(action) ?
-                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        mealRestController.get(getId(request));
-                request.setAttribute("meal", meal);
+                request.setAttribute("meal",  mealRestController.get(getId(request)));
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
             case "all":
