@@ -29,8 +29,9 @@ public class MealRestController {
     public List<MealTo> getAll() {
         log.debug("getAll{}");
         int userId = SecurityUtil.authUserId();
-        return MealsUtil.getFilteredTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay(), SecurityUtil.getStartTime(), SecurityUtil.getEndTime());
-//        return MealsUtil.getTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
+        return MealsUtil.getFilteredTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay(),
+                SecurityUtil.getStartTime(), SecurityUtil.getEndTime(),
+                SecurityUtil.getStartDate(), SecurityUtil.getEndDate());
     }
 
     public Meal get(int id) {
