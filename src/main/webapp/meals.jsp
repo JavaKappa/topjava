@@ -20,6 +20,21 @@
 <section>
     <h3><a href="index.html">Home</a></h3>
     <hr/>
+
+    <form method="get" action="meals">
+        <div style="display: flex">
+        <dl>
+            <dt>start time:</dt>
+            <dd><input type="time" name="dateStartTime" required></dd>
+        </dl>
+        <dl>
+            <dt>end time:</dt>
+            <dd><input type="time" name="dateEndTime" required></dd>
+        </dl>
+        </div>
+
+        <button type="submit">Save</button>
+    </form>
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
