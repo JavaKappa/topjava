@@ -1,3 +1,4 @@
+<%@ page import="ru.javawebinar.topjava.web.SecurityUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -23,14 +24,25 @@
 
     <form method="get" action="meals">
         <div style="display: flex">
-        <dl>
-            <dt>start time:</dt>
-            <dd><input type="time" name="dateStartTime" required></dd>
-        </dl>
-        <dl>
-            <dt>end time:</dt>
-            <dd><input type="time" name="dateEndTime" required></dd>
-        </dl>
+            <dl>
+                <dt>start time:</dt>
+                <dd><input type="time" name="startTime" ></dd>
+            </dl>
+            <dl>
+                <dt>end time:</dt>
+                <dd><input type="time" name="endTime"></dd>
+            </dl>
+        </div>
+
+        <div style="display: flex">
+            <dl>
+                <dt>start date:</dt>
+                <dd><input type="date" name="startDate"></dd>
+            </dl>
+            <dl>
+                <dt>end date:</dt>
+                <dd><input type="date" name="endDate"></dd>
+            </dl>
         </div>
 
         <button type="submit">Save</button>
