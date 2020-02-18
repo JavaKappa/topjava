@@ -17,7 +17,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    private UserService service = new UserService(new InMemoryUserRepository());
+    private UserService service;
 
     public List<User> getAll() {
         log.info("getAll");

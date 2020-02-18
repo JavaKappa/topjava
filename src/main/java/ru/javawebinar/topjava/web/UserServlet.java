@@ -20,11 +20,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class UserServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
      private ConfigurableApplicationContext ctx;
-    private AbstractUserController controller = new ProfileRestController();
+    private AbstractUserController controller;
 
     {
-//        ctx = new ClassPathXmlApplicationContext("spring/spring-app.xm");
-//        controller = ctx.getBean(ProfileRestController.class);
+        ctx = new ClassPathXmlApplicationContext("spring/spring-app.xm");
+        controller = ctx.getBean(ProfileRestController.class);
     }
     @Override
     public void init(ServletConfig config) throws ServletException {
