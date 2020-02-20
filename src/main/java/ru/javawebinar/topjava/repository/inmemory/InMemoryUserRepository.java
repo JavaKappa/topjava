@@ -24,10 +24,6 @@ public class InMemoryUserRepository implements UserRepository {
 
     public boolean delete(int id) {
         log.info("delete {}", id);
-//        if (repository.remove(id) == null) {
-//            throw new NotFoundException("User with id " + id + " does not exist");
-//        }
-//        return true;
         return repository.remove(id) != null;
     }
 
@@ -36,10 +32,8 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("save {}", user);
         if (user.isNew()) {
             user.setId(counter.incrementAndGet());
-            repository.put(user.getId(), user);
-            return user;
         }
-        return repository.putIfAbsent(user.getId(), user);
+        return repository.put(user.getId(), user);
     }
 
     @Override
