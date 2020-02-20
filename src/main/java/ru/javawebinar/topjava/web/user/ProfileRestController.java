@@ -9,6 +9,7 @@ import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 @Controller
 public class ProfileRestController extends AbstractUserController {
 
+
     public ProfileRestController(UserService service) {
         super(service);
     }

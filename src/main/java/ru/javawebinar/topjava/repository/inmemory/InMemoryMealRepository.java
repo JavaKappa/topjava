@@ -27,8 +27,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Meal save(int userId, Meal meal) {
         log.debug(String.format("Save meal %s to user with id %d", meal.getDescription(), userId));
-        repository.computeIfAbsent(userId,ConcurrentHashMap::new);
-        Map<Integer, Meal> userMeals = repository.get(userId);
+        Map<Integer, Meal> userMeals = repository.computeIfAbsent(userId, ConcurrentHashMap::new);
 
         if (meal.isNew()) {
             meal.setId(counter.getAndIncrement());
