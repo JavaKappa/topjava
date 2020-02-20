@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    ConfigurableApplicationContext ctx;
+    private ConfigurableApplicationContext ctx;
     private MealRestController mealRestController;
 
     {
@@ -32,6 +32,37 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setFilter(request);
+
+        String action = request.getParameter("action");
+
+        switch (action == null ? "all" : action) {
+            case "delete":
+                int id = getId(request);
+                log.info("Delete {}", id);
+                mealRestController.delete(id);
+                response.sendRedirect("meals");
+                break;
+            case "create":
+                request.setAttribute("meal", mealRestController.create());
+                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
+            case "update":
+                request.setAttribute("meal", mealRestController.get(getId(request)));
+                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
+            case "all":
+            default:
+                log.info("getAll");
+                request.setAttribute("meals",
+                        mealRestController.getAll());
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
+        }
     }
 
     @Override
@@ -75,37 +106,6 @@ public class MealServlet extends HttpServlet {
             LocalTime endTime = LocalTime.parse(endTimeStr);
             SecurityUtil.setEndTime(endTime);
         } else SecurityUtil.setEndTime(LocalTime.MAX);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        setFilter(request);
-
-        String action = request.getParameter("action");
-
-        switch (action == null ? "all" : action) {
-            case "delete":
-                int id = getId(request);
-                log.info("Delete {}", id);
-                mealRestController.delete(id);
-                response.sendRedirect("meals");
-                break;
-            case "create":
-                request.setAttribute("meal", mealRestController.create());
-                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
-                break;
-            case "update":
-                request.setAttribute("meal", mealRestController.get(getId(request)));
-                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
-                break;
-            case "all":
-            default:
-                log.info("getAll");
-                request.setAttribute("meals",
-                        mealRestController.getAll());
-                request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                break;
-        }
     }
 
     private int getId(HttpServletRequest request) {

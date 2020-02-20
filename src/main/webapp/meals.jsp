@@ -21,7 +21,6 @@
 <section>
     <h3><a href="index.html">Home</a></h3>
     <hr/>
-
     <form method="get" action="meals">
         <div style="display: flex">
             <dl>
