@@ -13,11 +13,15 @@ import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
-
+@Controller
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private UserService service;
+
+    public AbstractUserController(UserService service) {
+        this.service = service;
+    }
 
     public List<User> getAll() {
         log.info("getAll");

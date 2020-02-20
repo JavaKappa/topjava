@@ -16,7 +16,7 @@
         <th>Role</th>
     </tr>
     </thead>
-    <c:forEach items="${users}" var="users">
+    <c:forEach items="${users}" var="user">
         <jsp:useBean id="user" type="ru.javawebinar.topjava.model.User"/>
         <tr>
             <td>${user.id}</td>
