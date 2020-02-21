@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 @Repository
@@ -34,7 +35,12 @@ public class InMemoryMealRepository implements MealRepository {
             userMeals.put(meal.getId(), meal);
             return meal;
         }
-        return userMeals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return userMeals.computeIfPresent(meal.getId(), new BiFunction<Integer, Meal, Meal>() {
+            @Override
+            public Meal apply(Integer id, Meal oldMeal) {
+                return meal;
+            }
+        });
     }
 
     @Override
