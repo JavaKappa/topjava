@@ -11,10 +11,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,7 +75,7 @@ public class MealServiceTest {
     }
     @Test(expected = NotFoundException.class)
     public void getForeignFood() {
-        Meal meal = service.get(ADMIN_MEAL_1_ID, USER_ID);
+        service.get(ADMIN_MEAL_1_ID, USER_ID);
     }
 
     @Test(expected = NotFoundException.class)
