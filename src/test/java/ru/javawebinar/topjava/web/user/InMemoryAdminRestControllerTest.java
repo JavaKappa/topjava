@@ -5,15 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.inmemory.InMemoryUserRepository;
+import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-
-import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -24,8 +22,8 @@ public class InMemoryAdminRestControllerTest {
 
     private static ConfigurableApplicationContext appCtx;
     @Autowired
-    @Qualifier ("inMemoryUserRepository")
     private static AdminRestController controller;
+
 
     @BeforeClass
     public static void beforeClass() {
@@ -44,6 +42,8 @@ public class InMemoryAdminRestControllerTest {
         // re-initialize
         InMemoryUserRepository repository = appCtx.getBean(InMemoryUserRepository.class);
         repository.init();
+        controller.setService(new UserService(repository));
+
     }
 
     @Test
