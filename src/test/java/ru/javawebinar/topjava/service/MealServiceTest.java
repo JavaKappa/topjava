@@ -12,7 +12,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +41,6 @@ public class MealServiceTest {
     public void delete() {
         service.delete(USER_MEAL_1_ID, USER_ID);
         Meal meal = service.get(USER_MEAL_1_ID, USER_ID);
-        System.out.println(meal);
     }
 
     @Test
