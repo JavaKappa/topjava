@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web.user;
 
-import org.assertj.core.internal.bytebuddy.build.ToStringPlugin;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

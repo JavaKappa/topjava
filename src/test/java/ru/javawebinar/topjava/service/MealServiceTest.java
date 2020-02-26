@@ -12,6 +12,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,15 +47,16 @@ public class MealServiceTest {
 
     @Test
     public void getBetweenHalfOpen() {
-        List<Meal> meals = service.getBetweenHalfOpen(LocalDate.now(), LocalDate.now().plusDays(1), 100001);
-        assertMatch(meals, Arrays.asList(ADMIN_MEAL_1, ADMIN_MEAL_2));
+        List<Meal> actual = service.getBetweenHalfOpen(LocalDate.of(2020, 4, 21), LocalDate.of(2020, 4, 23), 100000);
+        List<Meal> expected = Arrays.asList(USER_MEAL_2, USER_MEAL_1);
+        assertMatch(expected, actual);
     }
 
     @Test
     public void getAll() {
         List<Meal> actual = service.getAll(USER_ID);
-        List<Meal> expected = Arrays.asList(USER_MEAL_1, USER_MEAL_2);
-        assertMatch(actual, expected);
+        List<Meal> expected = Arrays.asList(USER_MEAL_3, USER_MEAL_2, USER_MEAL_1);
+        assertMatch(expected, actual);
     }
 
 

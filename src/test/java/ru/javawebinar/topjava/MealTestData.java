@@ -10,13 +10,15 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 public class MealTestData {
     public static final int USER_MEAL_1_ID = START_SEQ + 2;
     public static final int USER_MEAL_2_ID = START_SEQ + 3;
-    public static final int ADMIN_MEAL_1_ID = START_SEQ + 4;
-    public static final int ADMIN_MEAL_2_ID = START_SEQ + 5;
+    public static final int USER_MEAL_3_ID = START_SEQ + 4;
+    public static final int ADMIN_MEAL_1_ID = START_SEQ + 5;
+    public static final int ADMIN_MEAL_2_ID = START_SEQ + 6;
 
-    public static final Meal USER_MEAL_1 = new Meal(USER_MEAL_1_ID, LocalDateTime.now(), "user_Meal 1", 500);
-    public static final Meal USER_MEAL_2 = new Meal(USER_MEAL_2_ID, LocalDateTime.now(), "user_Meal 2", 750);
-    public static final Meal ADMIN_MEAL_1 = new Meal(ADMIN_MEAL_1_ID, LocalDateTime.now(), "admin_Meal 1", 750);
-    public static final Meal ADMIN_MEAL_2 = new Meal(ADMIN_MEAL_2_ID, LocalDateTime.now(), "admin_Meal 2", 123);
+    public static final Meal USER_MEAL_1 = new Meal(USER_MEAL_1_ID, LocalDateTime.of(2020,4, 21, 7, 20), "user_Meal 1", 500);
+    public static final Meal USER_MEAL_2 = new Meal(USER_MEAL_2_ID, LocalDateTime.of(2020,4, 21, 12, 34), "user_Meal 2", 750);
+    public static final Meal USER_MEAL_3 = new Meal(USER_MEAL_3_ID, LocalDateTime.of(2020,4, 23, 17, 30), "user_Meal 3", 1750);
+    public static final Meal ADMIN_MEAL_1 = new Meal(ADMIN_MEAL_1_ID, LocalDateTime.of(2020,4, 21, 5, 10), "admin_Meal 1", 500);
+    public static final Meal ADMIN_MEAL_2 = new Meal(ADMIN_MEAL_2_ID, LocalDateTime.of(2020,4, 21, 14, 20), "admin_Meal 2", 123);
 
     public static void assertMatch(Meal expected, Meal actual) {
         Assertions.assertThat(actual).isEqualTo(expected);
