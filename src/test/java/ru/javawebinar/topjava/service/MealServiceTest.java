@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.service;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -79,11 +78,7 @@ public class MealServiceTest {
         service.get(ADMIN_MEAL_1_ID, USER_ID);
     }
 
-    @Test(expected = NotFoundException.class)
-    public void updateForeignFood() {
-        Meal meal = getUpdated();
-        service.update(meal, ADMIN_ID);
-    }
+
     @Test(expected = NotFoundException.class)
     public void deleteForeignFood() {
         service.delete(100002, ADMIN_ID);

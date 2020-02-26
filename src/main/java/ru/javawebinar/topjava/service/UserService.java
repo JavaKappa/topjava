@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
@@ -14,7 +13,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 public class UserService {
     private UserRepository repository;
 
-    public UserService(@Qualifier("jdbcUserRepository") UserRepository repository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
     }
 
