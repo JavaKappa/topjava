@@ -78,7 +78,7 @@ public class MealServlet extends HttpServlet {
                 LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
                 LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
                 LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
-                request.setAttribute("meals", mealController.getBetweenHalfOpen(startDate, startTime, endDate, endTime));
+                request.setAttribute("meals", mealController.getBetween(startDate, startTime, endDate, endTime));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
             case "all":

@@ -65,12 +65,12 @@ public class MealRestController {
      * <li>by time for every date</li>
      * </ol>
      */
-    public List<MealTo> getBetweenHalfOpen(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
-                                           @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
+    public List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
+                                   @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
         int userId = SecurityUtil.authUserId();
         log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
 
-        List<Meal> mealsDateFiltered = service.getBetweenHalfOpen(startDate, endDate, userId);
+        List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDate, endDate, userId);
         return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
 }
