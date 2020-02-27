@@ -44,8 +44,8 @@ public class UserServiceTest {
         User created = service.create(newUser);
         Integer newId = created.getId();
         newUser.setId(newId);
-        assertMatch(created, newUser);
-        assertMatch(service.get(newId), newUser);
+        USER_MATCHER.assertMatch(created, newUser);
+        USER_MATCHER.assertMatch(service.get(newId), newUser);
     }
 
     @Test(expected = DataAccessException.class)
@@ -66,7 +66,7 @@ public class UserServiceTest {
     @Test
     public void get() throws Exception {
         User user = service.get(USER_ID);
-        assertMatch(user, USER);
+        USER_MATCHER.assertMatch(user, USER);
     }
 
     @Test(expected = NotFoundException.class)
@@ -77,19 +77,19 @@ public class UserServiceTest {
     @Test
     public void getByEmail() throws Exception {
         User user = service.getByEmail("user@yandex.ru");
-        assertMatch(user, USER);
+        USER_MATCHER.assertMatch(user, USER);
     }
 
     @Test
     public void update() throws Exception {
         User updated = getUpdated();
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated);
+        USER_MATCHER.assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();
-        assertMatch(all, ADMIN, USER);
+        USER_MATCHER.assertMatch(all, ADMIN, USER);
     }
 }
