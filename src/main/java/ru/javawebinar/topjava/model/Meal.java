@@ -1,17 +1,17 @@
 package ru.javawebinar.topjava.model;
 
-import org.hibernate.validator.constraints.Range;
-
 import javax.persistence.*;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
-        //TODO
-        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id"),
-        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m ORDER BY m.dateTime")
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.BETWEEN_HALF_OPEN, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id  AND m.dateTime >=:date_time_start AND m.dateTime < :date_time_end  ORDER BY m.dateTime DESC"),
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = "date_time", name = "meals_unique_user_datetime_idx")})
@@ -19,16 +19,18 @@ public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String BETWEEN_HALF_OPEN = "Meal.getBetweenHalfOpen";
-    @NotBlank
+
+
     @Column(name = "date_time", unique = true, nullable = false)
+    @NotNull
     private LocalDateTime dateTime;
     @Column(name = "description")
     @NotBlank
-    @NotBlank
     private String description;
-    @NotBlank
+    @NotNull
     @Column(name = "calories")
     private int calories;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -97,3 +99,5 @@ public class Meal extends AbstractBaseEntity {
                 '}';
     }
 }
+
+
