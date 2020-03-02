@@ -38,18 +38,18 @@ public class JpaMealRepository implements MealRepository {
     @Override
     @Transactional
     public boolean delete(int id, int userId) {
-        return em.createNamedQuery(Meal.DELETE).setParameter("id", id).setParameter("userId", userId).executeUpdate() != 0;
-
+        return em.createNamedQuery(Meal.DELETE).setParameter("id", id)
+                .setParameter("userId", userId).executeUpdate() != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
         Meal m = em.find(Meal.class, id);
         if (m == null) {
-            return m;
+            return null;
         }
-        User curentUser = Hibernate.unproxy(m.getUser(), User.class);
-        if (!curentUser.getId().equals(userId)) {
+        User currentUser = Hibernate.unproxy(m.getUser(), User.class);
+        if (!currentUser.getId().equals(userId)) {
             return null;
         }
         return m;
