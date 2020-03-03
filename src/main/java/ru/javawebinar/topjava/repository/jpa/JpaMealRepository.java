@@ -1,13 +1,10 @@
 package ru.javawebinar.topjava.repository.jpa;
 
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
@@ -29,7 +26,7 @@ public class JpaMealRepository implements MealRepository {
             return meal;
         } else {
             Meal m = get(meal.getId(), userId);
-            if (m == null) throw new NotFoundException("Meal NotFound");
+            if (m == null){ return null;}
             meal.setUser(ref);
             return em.merge(meal);
         }
@@ -48,8 +45,7 @@ public class JpaMealRepository implements MealRepository {
         if (m == null) {
             return null;
         }
-        User currentUser = Hibernate.unproxy(m.getUser(), User.class);
-        if (!currentUser.getId().equals(userId)) {
+        if (!m.getUser().getId().equals(userId)) {
             return null;
         }
         return m;
@@ -58,11 +54,11 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return em.createNamedQuery(Meal.ALL_SORTED).setParameter("userId", userId).getResultList();
+        return em.createNamedQuery(Meal.ALL_SORTED, Meal.class).setParameter("userId", userId).getResultList();
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return em.createNamedQuery(Meal.BETWEEN_HALF_OPEN).setParameter("user_id", userId).setParameter("date_time_start", startDate).setParameter("date_time_end", endDate).getResultList();
+        return em.createNamedQuery(Meal.BETWEEN_HALF_OPEN, Meal.class).setParameter("user_id", userId).setParameter("date_time_start", startDate).setParameter("date_time_end", endDate).getResultList();
     }
 }
