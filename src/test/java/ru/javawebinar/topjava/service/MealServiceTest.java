@@ -27,8 +27,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 //@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-//@ActiveProfiles({"postgres", "datajpa"})
-@ActiveProfiles({Profiles.POSTGRES_DB, Profiles.DATAJPA})
+@ActiveProfiles({Profiles.HSQL_DB, Profiles.JDBC})
 public class MealServiceTest extends ServiceTest{
 
     @Autowired
