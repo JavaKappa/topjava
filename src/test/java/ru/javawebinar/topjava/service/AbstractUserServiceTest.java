@@ -9,7 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.JpaUtil;
+
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -31,23 +31,10 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    @Autowired
-    private Environment environment;
-
-
-    protected JpaUtil jpaUtil;
 
     @Before
     public void setUp() throws Exception {
-
-//        for (String profile :
-//                environment.getActiveProfiles()) {
-//            if (profile.equalsIgnoreCase("jpa")) {
-//                jpaUtil = new JpaUtil();
-//            }
-//        }
         cacheManager.getCache("users").clear();
-//        jpaUtil.clear2ndLevelHibernateCache();
     }
 
     @Test
