@@ -35,33 +35,12 @@ public class JspMealController {
     private MealService service;
 
     @GetMapping("/meals")
-    public String getMeals(HttpServletRequest request, HttpServletResponse response) {
-        String action = request.getParameter("action");
+    public String getMeals(HttpServletRequest request) {
+        request.setAttribute("meals", MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
+        return "meals";
 
-        switch (action == null ? "all" : action) {
-            case "create":
-            case "update":
-                final Meal meal = "create".equals(action) ?
-                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        service.get(getId(request), SecurityUtil.authUserId());
-                request.setAttribute("meal", meal);
-                return "mealForm";
-            case "filter":
-                LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
-                LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
-                LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
-                LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
-                request.setAttribute("meals", getBetween(startDate, startTime, endDate, endTime));
-                return "meals";
-            case "delete":
-                int id = getId(request);
-                service.delete(id, SecurityUtil.authUserId());
-            case "all":
-            default:
-                request.setAttribute("meals", MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
-                return "meals";
-        }
     }
+
     @PostMapping("/meals")
     public String setMeals(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
@@ -80,12 +59,48 @@ public class JspMealController {
         request.setAttribute("meals", MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
         return "meals";
     }
+
+    @PostMapping("/filter")
+    public String filter(HttpServletRequest request) {
+        LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
+        LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
+        LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
+        LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
+        request.setAttribute("meals", getBetween(startDate, startTime, endDate, endTime));
+        return "meals";
+    }
+
+    @GetMapping("/create")
+    public String create(HttpServletRequest request) {
+        final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
+        request.setAttribute("meal", meal);
+        request.setAttribute("action", "Create");
+        return "mealForm";
+    }
+
+    @GetMapping("/update")
+    public String update(HttpServletRequest request) {
+        final Meal meal = service.get(getId(request), SecurityUtil.authUserId());
+        ;
+        request.setAttribute("action", "Update");
+        request.setAttribute("meal", meal);
+        return "mealForm";
+    }
+
+    @GetMapping("/delete")
+    public String delete(HttpServletRequest request) {
+        int id = getId(request);
+        service.delete(id, SecurityUtil.authUserId());
+        return "redirect:meals";
+    }
+
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
     }
+
     private List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
-                                   @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
+                                    @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
         int userId = SecurityUtil.authUserId();
         List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDate, endDate, userId);
         return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
