@@ -21,10 +21,11 @@
         <appender-ref ref="result"/>
     </logger>
 
-    <!--<logger name="org.postgresql" level="debug"/>-->
-    <!--<logger name="org.springframework.jdbc" level="debug"/>-->
+    <logger name="org.postgresql" level="debug"/>
+    <logger name="org.springframework.jdbc" level="debug"/>
 
     <logger name="ru.javawebinar.topjava" level="debug"/>
+    <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="info"/>
 
     <root level="INFO">
         <appender-ref ref="console"/>
