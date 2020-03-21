@@ -81,7 +81,6 @@ public class JspMealController {
     @GetMapping("/update")
     public String update(HttpServletRequest request) {
         final Meal meal = service.get(getId(request), SecurityUtil.authUserId());
-        ;
         request.setAttribute("action", "Update");
         request.setAttribute("meal", meal);
         return "mealForm";
