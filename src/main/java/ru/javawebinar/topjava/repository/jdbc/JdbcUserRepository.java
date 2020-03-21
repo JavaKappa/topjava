@@ -16,6 +16,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.sql.PreparedStatement;
@@ -142,7 +143,7 @@ public class JdbcUserRepository implements UserRepository {
         return users;
     }
 
-    private void insertRoles(@Positive @NotNull int userId, @NotNull Set<Role> roles) {
+    private void insertRoles(@Positive @NotNull int userId, @NotNull @NotEmpty Set<Role> roles) {
         roles.forEach(r -> jdbcTemplate.update("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", userId, r.name()));
     }
 }
