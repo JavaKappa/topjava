@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.repository.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -16,6 +15,9 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -75,7 +77,7 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     @Transactional(rollbackFor = Throwable.class, propagation = Propagation.REQUIRED)
-    public User save(User user) {
+    public User save(@NotNull User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
@@ -114,18 +116,18 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean delete(int id) {
+    public boolean delete(@Positive @NotNull int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
 
     @Override
-    public User get(int id) {
+    public User get(@Positive @NotNull int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id WHERE id=?", extractor, id);
         return DataAccessUtils.singleResult(users);
     }
 
     @Override
-    public User getByEmail(String email) {
+    public User getByEmail(@Email String email) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("SELECT * FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id WHERE email=?", extractor, email);
         return DataAccessUtils.singleResult(users);
@@ -140,7 +142,7 @@ public class JdbcUserRepository implements UserRepository {
         return users;
     }
 
-    private void insertRoles(int userId, Set<Role> roles) {
+    private void insertRoles(@Positive @NotNull int userId, @NotNull Set<Role> roles) {
         roles.forEach(r -> jdbcTemplate.update("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", userId, r.name()));
     }
 }
