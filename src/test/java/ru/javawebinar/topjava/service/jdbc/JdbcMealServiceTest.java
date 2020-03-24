@@ -11,8 +11,8 @@ import static ru.javawebinar.topjava.Profiles.JDBC;
 public class JdbcMealServiceTest extends AbstractMealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(JdbcMealServiceTest.class);
 
-    @Override
-    public void createWithException() throws Exception {
-        log.debug("Method is not supported");
-    }
+//    @Override
+//    public void createWithException() throws Exception {
+//        log.debug("Method is not supported");
+//    }
 }

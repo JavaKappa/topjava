@@ -11,8 +11,8 @@ import static ru.javawebinar.topjava.Profiles.JDBC;
 public class JdbcUserServiceTest extends AbstractUserServiceTest {
     private static final Logger log = LoggerFactory.getLogger(JdbcUserServiceTest.class);
 
-    @Override
-    public void createWithException() throws Exception {
-        log.debug("log is not supported");
-    }
+//    @Override
+//    public void createWithException() throws Exception {
+//        log.debug("log is not supported");
+//    }
 }

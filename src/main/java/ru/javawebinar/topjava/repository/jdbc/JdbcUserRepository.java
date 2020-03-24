@@ -19,9 +19,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.*;
 
 @Repository
@@ -92,23 +89,8 @@ public class JdbcUserRepository implements UserRepository {
 //            return null;
 //        }
         else {
-            this.jdbcTemplate.batchUpdate("UPDATE users SET name=?, email=?, password=?, registered=?, enabled=?, calories_per_day=?  WHERE id=?",
-                    new BatchPreparedStatementSetter() {
-                        @Override
-                        public void setValues(PreparedStatement ps, int i) throws SQLException {
-                            ps.setString(1, user.getName());
-                            ps.setString(2, user.getEmail());
-                            ps.setString(3, user.getPassword());
-                            ps.setTimestamp(4, new Timestamp(user.getRegistered().getTime()));
-                            ps.setInt(5, user.getCaloriesPerDay());
-                            ps.setInt(6, user.getId());
-                        }
-
-                        @Override
-                        public int getBatchSize() {
-                            return 0;
-                        }
-                    });
+            jdbcTemplate.update("UPDATE users SET name=?, email=?, password=?, registered=?, enabled=?, calories_per_day=?  WHERE id=?",
+                    user.getName(), user.getEmail(), user.getPassword(), user.getRegistered(), user.isEnabled(), user.getCaloriesPerDay(), user.getId());
             jdbcTemplate.update("DELETE FROM user_roles where user_id = ?", user.getId());
             insertRoles(user.getId(), user.getRoles());
         }
