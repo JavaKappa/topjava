@@ -88,6 +88,4 @@ public class JspMealController extends AbstractMealController{
         service.delete(id, SecurityUtil.authUserId());
         return "redirect:meals";
     }
-
-
 }
