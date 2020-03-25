@@ -40,7 +40,7 @@ public class JdbcMealRepository implements MealRepository {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public Meal save(@NotNull Meal meal, @Positive int userId) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())

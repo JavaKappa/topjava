@@ -19,13 +19,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 @Repository
 @Transactional(readOnly = true)
 public class JdbcUserRepository implements UserRepository {
     private static ResultSetExtractor<List<User>> extractor = rs -> {
-        Map<Integer, User> map = new TreeMap<>();
+        Map<Integer, User> map = new HashMap<>();
         while (rs.next()) {
             int id = rs.getInt("id");
             String name = rs.getString("name");
@@ -37,18 +39,7 @@ public class JdbcUserRepository implements UserRepository {
 
             String role = rs.getString("role");
 
-            map.computeIfAbsent(id, integer -> {
-                User user = new User();
-                user.setId(id);
-                user.setName(name);
-                user.setEmail(email);
-                user.setPassword(password);
-                user.setRegistered(registered);
-                user.setEnabled(enabled);
-                user.setCaloriesPerDay(caloriesPerDay);
-                user.setRoles(new TreeSet<>());
-                return user;
-            });
+            map.computeIfAbsent(id, integer -> new User(id, name, email, password, caloriesPerDay, enabled, registered, EnumSet.noneOf(Role.class)));
 
             if (role != null) {
                 Set<Role> roles = map.get(id).getRoles();
@@ -82,17 +73,10 @@ public class JdbcUserRepository implements UserRepository {
             int id = newKey.intValue();
             user.setId(id);
             insertRoles(id, user.getRoles());
-        }
-//        else if (namedParameterJdbcTemplate.update(
-//                "UPDATE users SET name=:name, email=:email, password=:password, " +
-//                        "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
-//            return null;
-//        }
-        else {
-            jdbcTemplate.update("UPDATE users SET name=?, email=?, password=?, registered=?, enabled=?, calories_per_day=?  WHERE id=?",
-                    user.getName(), user.getEmail(), user.getPassword(), user.getRegistered(), user.isEnabled(), user.getCaloriesPerDay(), user.getId());
-            jdbcTemplate.update("DELETE FROM user_roles where user_id = ?", user.getId());
-            insertRoles(user.getId(), user.getRoles());
+        } else if (namedParameterJdbcTemplate.update(
+                "UPDATE users SET name=:name, email=:email, password=:password, " +
+                        "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
+            return null;
         }
         return user;
     }
@@ -118,14 +102,24 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        List<User> users = jdbcTemplate.query("SELECT * FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id", extractor);
-        if (users != null) {
-            users.sort(Comparator.comparing(User::getName).thenComparing(User::getEmail));
-        }
-        return users;
+        return jdbcTemplate.query("SELECT * FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id ORDER BY name, email", extractor);
     }
 
-    private void insertRoles(@Positive @NotNull int userId, @NotNull @NotEmpty Set<Role> roles) {
-        roles.forEach(r -> jdbcTemplate.update("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", userId, r.name()));
+    private int[] insertRoles(@Positive @NotNull int userId, @NotNull @NotEmpty Set<Role> roles) {
+//        roles.forEach(r -> jdbcTemplate.update("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", userId, r.name()));
+        List<Role> roleList = new ArrayList<>(roles);
+        return jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1, userId);
+                ps.setString(2, roleList.get(i).name());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return roleList.size();
+            }
+        });
+
     }
 }

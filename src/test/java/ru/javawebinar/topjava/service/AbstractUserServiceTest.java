@@ -88,6 +88,12 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         service.update(updated);
         USER_MATCHER.assertMatch(service.get(USER_ID), updated);
     }
+    @Test(expected = NotFoundException.class)
+    public void updateNotFound() throws Exception {
+        User notFoundUser = new User(1, "NotFound", "email@mail.ru", "password", Role.ROLE_USER);
+        service.update(notFoundUser);
+        service.get(notFoundUser.getId());
+    }
 
     @Test
     public void getAll() throws Exception {
@@ -97,7 +103,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void createWithException() throws Exception {
-        Assume.assumeTrue(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.equalsIgnoreCase("jdbc")));
+        Assume.assumeFalse(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.equalsIgnoreCase("jdbc")));
         validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.ROLE_USER)), ConstraintViolationException.class);
