@@ -34,13 +34,13 @@ import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 public class JspMealController extends AbstractMealController{
 
     @GetMapping("/meals")
-    public String getMeals(HttpServletRequest request) {
+    public String getAll(HttpServletRequest request) {
         request.setAttribute("meals", MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
         return "meals";
     }
 
     @PostMapping("/meals")
-    public String setMeals(HttpServletRequest request) throws UnsupportedEncodingException {
+    public String set(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
@@ -72,14 +72,12 @@ public class JspMealController extends AbstractMealController{
     public String create(HttpServletRequest request) {
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
-        request.setAttribute("action", "Create");
         return "mealForm";
     }
 
     @GetMapping("/meal_update")
     public String update(HttpServletRequest request) {
         final Meal meal = service.get(getId(request), SecurityUtil.authUserId());
-        request.setAttribute("action", "Update");
         request.setAttribute("meal", meal);
         return "mealForm";
     }
