@@ -31,9 +31,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 
 @Controller
-public class JspMealController {
-    @Autowired
-    private MealService service;
+public class JspMealController extends AbstractMealController{
 
     @GetMapping("/meals")
     public String getMeals(HttpServletRequest request) {
@@ -60,7 +58,7 @@ public class JspMealController {
         return "meals";
     }
 
-    @PostMapping("/filter")
+    @PostMapping("/meals_filter")
     public String filter(HttpServletRequest request) {
         LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
@@ -70,7 +68,7 @@ public class JspMealController {
         return "meals";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/meal_create")
     public String create(HttpServletRequest request) {
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
@@ -78,7 +76,7 @@ public class JspMealController {
         return "mealForm";
     }
 
-    @GetMapping("/update")
+    @GetMapping("/meal_update")
     public String update(HttpServletRequest request) {
         final Meal meal = service.get(getId(request), SecurityUtil.authUserId());
         request.setAttribute("action", "Update");
@@ -86,22 +84,12 @@ public class JspMealController {
         return "mealForm";
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/meal_delete")
     public String delete(HttpServletRequest request) {
         int id = getId(request);
         service.delete(id, SecurityUtil.authUserId());
         return "redirect:meals";
     }
 
-    private int getId(HttpServletRequest request) {
-        String paramId = Objects.requireNonNull(request.getParameter("id"));
-        return Integer.parseInt(paramId);
-    }
 
-    private List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
-                                    @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
-        int userId = SecurityUtil.authUserId();
-        List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDate, endDate, userId);
-        return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
-    }
 }

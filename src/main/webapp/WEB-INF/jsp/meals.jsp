@@ -14,7 +14,7 @@
     <h3><a href="index.jsp">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
-    <form method="post" action="filter">
+    <form method="post" action="meals_filter">
         <input type="hidden" name="action" value="filter">
         <dl>
             <dt>From Date:</dt>
@@ -36,7 +36,7 @@
     </form>
     <hr/>
 <%--    <a href="meals?action=create">Add Meal</a>--%>
-    <a href="create">Add Meal</a>
+    <a href="/meal_create">Add Meal</a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -60,8 +60,8 @@
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
 <%--                <td><a href="meals?action=update&id=${meal.id}">Update</a></td>--%>
-                <td><a href="update?id=${meal.id}">Update</a></td>
-                <td><a href="delete?id=${meal.id}">Delete</a></td>
+                <td><a href="meal_update?id=${meal.id}">Update</a></td>
+                <td><a href="meal_delete?id=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
