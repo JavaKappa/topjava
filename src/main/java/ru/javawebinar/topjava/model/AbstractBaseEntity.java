@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.model;
 
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
@@ -33,6 +34,12 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
 
     @Override
     public Integer getId() {
+        return id;
+    }
+
+    // doesn't work for hibernate lazy proxy
+    public int id() {
+        Assert.notNull(id, "Entity must has id");
         return id;
     }
 
