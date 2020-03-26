@@ -85,7 +85,7 @@
                             <configfile>
                                 <file>src/main/resources/tomcat/context.xml</file>
                                 <todir>conf/Catalina/localhost/</todir>
-                                <tofile>context.xml.default</tofile>
+                                <tofile>${project.build.finalName}.xml</tofile>
                             </configfile>
                         </configfiles>
                     </configuration>
