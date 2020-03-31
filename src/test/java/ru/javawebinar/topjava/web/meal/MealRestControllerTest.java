@@ -89,6 +89,22 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 LocalDate.of(2020, 1, 31), UserTestData.USER_ID), SecurityUtil.authUserCaloriesPerDay()));
         Assertions.assertEquals(responseJson, expectedResponseJson);
     }
+    @Test
+    void getBetweenOptional() throws Exception {
+        MvcResult result = perform(MockMvcRequestBuilders.get(REST_URL + "filterOptional")
+                .param("startDate", "2020-01-31")
+                .param("startTime", "00:00:00.000")
+                .param("endDate", "2020-01-31")
+                .param("endTime", "23:59:00.000"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(APPLICATION_JSON))
+                .andReturn();
+        String responseJson = result.getResponse().getContentAsString();
+        String expectedResponseJson = JsonUtil.writeValue(MealsUtil.getTos(service.getBetweenInclusive(LocalDate.of(2020, 1, 31),
+                LocalDate.of(2020, 1, 31), UserTestData.USER_ID), SecurityUtil.authUserCaloriesPerDay()));
+        Assertions.assertEquals(responseJson, expectedResponseJson);
+    }
 
     @Test
     void getAll() throws Exception {
