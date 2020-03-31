@@ -3,9 +3,7 @@ package ru.javawebinar.topjava.web.meal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -13,7 +11,6 @@ import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
@@ -21,7 +18,6 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -89,6 +85,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 LocalDate.of(2020, 1, 31), UserTestData.USER_ID), SecurityUtil.authUserCaloriesPerDay()));
         Assertions.assertEquals(responseJson, expectedResponseJson);
     }
+
     @Test
     void getBetweenOptional() throws Exception {
         MvcResult result = perform(MockMvcRequestBuilders.get(REST_URL + "filterOptional")
