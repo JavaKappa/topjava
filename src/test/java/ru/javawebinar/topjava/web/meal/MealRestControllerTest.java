@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -75,20 +76,26 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() throws Exception{
-        System.out.println(REST_URL + "filter");
+    void getBetween() throws Exception {
         MvcResult result = perform(MockMvcRequestBuilders.get(REST_URL + "filter")
-                .param("startDateTime","2020-01-31T00:00:00.000")
-                .param("endDateTime","2020-01-31T23:59:00.000"))
+                .param("startDateTime", "2020-01-31T00:00:00.000")
+                .param("endDateTime", "2020-01-31T23:59:00.000"))
                 .andDo(MockMvcResultHandlers.print())
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().contentType(APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(APPLICATION_JSON))
                 .andReturn();
         String responseJson = result.getResponse().getContentAsString();
-        List<MealTo> mealList = JsonUtil.readValues(responseJson, MealTo.class);
-        MealTestData.MEALTO_MATCHER.assertMatch(mealList,
-                MealsUtil.getTos(service.getBetweenInclusive(LocalDate.of(2020, 1, 31),
-                        LocalDate.of(2020, 2, 1), UserTestData.USER_ID),
-                        SecurityUtil.authUserCaloriesPerDay()));
+        String expectedResponseJson = JsonUtil.writeValue(MealsUtil.getTos(service.getBetweenInclusive(LocalDate.of(2020, 1, 31),
+                LocalDate.of(2020, 1, 31), UserTestData.USER_ID), SecurityUtil.authUserCaloriesPerDay()));
+        Assertions.assertEquals(responseJson, expectedResponseJson);
+    }
+
+    @Test
+    void getAll() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(APPLICATION_JSON))
+                .andExpect(result -> Assertions.assertEquals(result.getResponse().getContentAsString(),
+                        JsonUtil.writeValue(MealsUtil.getTos(MealTestData.MEALS, SecurityUtil.authUserCaloriesPerDay()))));
     }
 }
