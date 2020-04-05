@@ -7,7 +7,7 @@ $(function () {
                 "info": true,
                 "columns": [
                     {
-                        "data": "date_time"
+                        "data": "dateTime"
                     },
                     {
                         "data": "description"
@@ -26,7 +26,7 @@ $(function () {
                 ],
                 "order": [
                     [
-                        0,
+                        2,
                         "asc"
                     ]
                 ]
