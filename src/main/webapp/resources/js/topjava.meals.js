@@ -26,8 +26,8 @@ $(function () {
                 ],
                 "order": [
                     [
-                        2,
-                        "asc"
+                        0,
+                        "dsc"
                     ]
                 ]
             })
