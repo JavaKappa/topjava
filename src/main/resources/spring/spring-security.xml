@@ -15,6 +15,18 @@ http://www.springframework.org/schema/security ">
         <csrf disabled="true"/>
     </http>
 
+<!--    <http pattern="/meals" use-expressions="true" name="ajaxSecurityFilterChain" create-session="stateless">-->
+<!--        <http-basic/>-->
+<!--        <intercept-url pattern="/**" access="isAuthenticated()"/>-->
+<!--        <csrf disabled="true"/>-->
+<!--    </http>-->
+
+<!--    <http pattern="/ajax" use-expressions="true" name="ajaxSecurityFilterChain" create-session="stateless">-->
+<!--        <http-basic/>-->
+<!--        <intercept-url pattern="/**" access="isAuthenticated()"/>-->
+<!--        <csrf disabled="true"/>-->
+<!--    </http>-->
+
     <beans:bean name="noopEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
 
     <authentication-manager>
