@@ -13,6 +13,9 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.javawebinar.topjava.TestUtil.mockAuthorize;
+import static ru.javawebinar.topjava.UserTestData.USER;
+
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 automatic resource management
@@ -25,6 +28,8 @@ public class SpringMain {
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ROLE_ADMIN));
             System.out.println();
+
+            mockAuthorize(USER);
 
             MealRestController mealController = appCtx.getBean(MealRestController.class);
             List<MealTo> filteredMealsWithExcess =
