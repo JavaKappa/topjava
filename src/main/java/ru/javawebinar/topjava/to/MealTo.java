@@ -1,17 +1,25 @@
 package ru.javawebinar.topjava.to;
 
+import org.hibernate.validator.constraints.Range;
+import org.springframework.lang.Nullable;
+import ru.javawebinar.topjava.util.DateTimeUtil;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class MealTo extends BaseTo {
-
+    @NotNull
     private final LocalDateTime dateTime;
-
+    @NotEmpty
     private final String description;
-
+    @Range(min = 5, max = 5000, message="must between 5 and 5000")
     private final int calories;
-
+    @Nullable
     private final boolean excess;
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})

@@ -29,11 +29,13 @@ $(function () {
                 },
                 {
                     "defaultContent": "Edit",
-                    "orderable": false
+                    "orderable": false,
+                    "render": renderEditBtn
                 },
                 {
                     "defaultContent": "Delete",
-                    "orderable": false
+                    "orderable": false,
+                    "render": renderDeleteBtn
                 }
             ],
             "order": [

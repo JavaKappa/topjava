@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.to;
 
+import org.springframework.lang.Nullable;
 import ru.javawebinar.topjava.HasId;
 
 public abstract class BaseTo implements HasId {
