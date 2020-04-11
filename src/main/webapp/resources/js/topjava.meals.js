@@ -28,13 +28,13 @@ $(function () {
                     "data": "calories"
                 },
                 {
-                    "defaultContent": "Edit",
                     "orderable": false,
+                    "defaultContent": "",
                     "render": renderEditBtn
                 },
                 {
-                    "defaultContent": "Delete",
                     "orderable": false,
+                    "defaultContent": "",
                     "render": renderDeleteBtn
                 }
             ],
