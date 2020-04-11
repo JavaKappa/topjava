@@ -83,7 +83,7 @@
                     <con:request>{"name": "New2",
  "email": "new2@yandex.ru",
  "password": "passwordNew",
- "roles": ["ROLE_USER"]
+ "roles": ["USER"]
 }
                     </con:request>
                     <con:originalUri>http://localhost/topjava/rest/admin/users</con:originalUri>
@@ -184,7 +184,7 @@
                     <con:request>{"name": "UserUpdated",
  "email": "user@yandex.ru",
  "password": "passwordNew",
- "roles": ["ROLE_USER"]
+ "roles": ["USER"]
 }
                     </con:request>
                     <con:originalUri>http://localhost/topjava/rest/admin/users/100000</con:originalUri>
@@ -303,7 +303,7 @@
                     <con:request>{"name": "New777",
  "email": "new777@yandex.ru",
  "password": "passwordNew",
- "roles": ["ROLE_USER"]
+ "roles": ["USER"]
 }
                     </con:request>
                     <con:originalUri>http://localhost/topjava/rest/profile</con:originalUri>
