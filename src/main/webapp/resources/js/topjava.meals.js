@@ -15,17 +15,21 @@ $(function () {
     makeEditable({
         ajaxUrl: "ajax/profile/meals/",
         datatableApi: $("#datatable").DataTable({
+            "ajax": {
+                "url": "ajax/profile/meals/",
+                "dataSrc": ""
+            },
             "paging": false,
             "info": true,
             "columns": [
                 {
-                    "data": "dateTime"
+                    "data": "dateTime",
                 },
                 {
                     "data": "description"
                 },
                 {
-                    "data": "calories"
+                    "data": "calories",
                 },
                 {
                     "orderable": false,
