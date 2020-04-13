@@ -32,6 +32,15 @@ $(function () {
                     "data": "calories",
                 },
                 {
+                    "data": "excess",
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).css('display', 'none');
+                        if (cellData.toString() === 'true') {
+                            $(td).closest('tr').attr("data-mealExcess", "true");
+                        }else $(td).closest('tr').attr("data-mealExcess", "false");
+                    }
+                },
+                {
                     "orderable": false,
                     "defaultContent": "",
                     "render": renderEditBtn
