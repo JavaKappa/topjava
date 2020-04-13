@@ -57,7 +57,7 @@ public class MealUIController extends AbstractMealController {
         if (meal.isNew()) {
             super.create(meal);
         } else {
-            super.update(meal, SecurityUtil.authUserId());
+            super.update(meal, meal.getId());
         }
     }
 
