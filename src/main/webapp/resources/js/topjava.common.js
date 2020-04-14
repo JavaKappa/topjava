@@ -21,7 +21,11 @@ function updateRow(id) {
     $("#modalTitle").html(i18n["editTitle"]);
     $.get(context.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
-            form.find("input[name='" + key + "']").val(value);
+            if (key === 'dateTime') {
+                form.find("input[name='" + key + "']").val(value.toString().replace('T', ' '));
+            } else {
+                form.find("input[name='" + key + "']").val(value);
+            }
         });
         $('#editRow').modal();
     });
@@ -84,7 +88,6 @@ function failNoty(jqXHR) {
 }
 
 function renderEditBtn(data, type, row) {
-    debugger;
     if (type === "display") {
         return "<a onclick='updateRow(" + row.id + ");'><span class='fa fa-pencil'></span></a>";
     }

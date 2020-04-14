@@ -27,6 +27,9 @@ $(function () {
             "columns": [
                 {
                     "data": "dateTime",
+                    render: function (cellData) {
+                        return cellData.toString().replace('T', ' ');
+                    }
                 },
                 {
                     "data": "description"
@@ -87,5 +90,9 @@ $(function () {
         hours12: true,
         format: formatTime,
     });
-
+    $('#dateTime').datetimepicker({
+        timepicker: true,
+        datepicker: true,
+        format: formatDate + " " + formatTime,
+    });
 });
