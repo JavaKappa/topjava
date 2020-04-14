@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="resources/css/style.css">
     <link rel="stylesheet" href="webjars/bootstrap/4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/datetimepicker/2.5.20/build/jquery.datetimepicker.min.css">
     <link rel="stylesheet" href="webjars/noty/3.1.4/demo/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="webjars/datatables/1.10.20/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="webjars/noty/3.1.4/lib/noty.css"/>
@@ -20,4 +21,6 @@
     <script type="text/javascript" src="webjars/datatables/1.10.20/js/jquery.dataTables.min.js" defer></script>
     <script type="text/javascript" src="webjars/datatables/1.10.20/js/dataTables.bootstrap4.min.js" defer></script>
     <script type="text/javascript" src="webjars/noty/3.1.4/lib/noty.min.js" defer></script>
+    <script type="text/javascript" src="webjars/datetimepicker/2.5.20/build/jquery.datetimepicker.full.js" defer></script>
+    <script type="text/javascript" src="webjars/datetimepicker/2.5.20/build/jquery.datetimepicker.min.js" defer></script>
 </head>
