@@ -1,3 +1,6 @@
+const formatDate = 'Y-m-d';
+const formatTime = 'H:i';
+
 function updateFilteredTable() {
     $.ajax({
         type: "GET",
@@ -37,7 +40,7 @@ $(function () {
                         $(td).css('display', 'none');
                         if (cellData.toString() === 'true') {
                             $(td).closest('tr').attr("data-mealExcess", "true");
-                        }else $(td).closest('tr').attr("data-mealExcess", "false");
+                        } else $(td).closest('tr').attr("data-mealExcess", "false");
                     }
                 },
                 {
@@ -60,4 +63,29 @@ $(function () {
         }),
         updateTable: updateFilteredTable
     });
+
+    $('#startDate').datetimepicker({
+        timepicker: false,
+        datepicker: true,
+        format: formatDate,
+    });
+
+    $('#endDate').datetimepicker({
+        timepicker: false,
+        datepicker: true,
+        format: formatDate,
+    });
+    $('#startTime').datetimepicker({
+        timepicker: true,
+        datepicker: false,
+         format: formatTime,
+    });
+
+    $('#endTime').datetimepicker({
+        timepicker: true,
+        datepicker: false,
+        hours12: true,
+        format: formatTime,
+    });
+
 });
