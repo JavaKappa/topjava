@@ -66,7 +66,8 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void update(UserTo userTo) {
         User user = get(userTo.id());
-        repository.save(UserUtil.updateFromTo(user, userTo));
+        User updatedUser = UserUtil.updateFromTo(user, userTo);
+        repository.save(updatedUser);   // !! need only for JDBC implementation
     }
 
     @CacheEvict(value = "users", allEntries = true)
