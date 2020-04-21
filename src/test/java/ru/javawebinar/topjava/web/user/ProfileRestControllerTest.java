@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.UserTo;
@@ -75,5 +77,25 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         USER_MATCHER.assertMatch(userService.get(USER_ID), UserUtil.updateFromTo(new User(USER), updatedTo));
+    }
+    @Test
+    void incorrectDataUserNameTest() throws Exception {
+        User newUser = getNew();
+        newUser.setName("");
+        perform(MockMvcRequestBuilders.post(REST_URL+ "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newUser)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void incorrectDataUserEmailTest() throws Exception {
+        User newUser = getNew();
+        newUser.setEmail("affff");
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newUser))
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isUnprocessableEntity());
     }
 }

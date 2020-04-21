@@ -42,13 +42,13 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(BindException.class)
     public ErrorInfo validDataExceptionHandler(HttpServletRequest req, BindException e) {
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
+        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorInfo validateRestControllerArgumentBody(HttpServletRequest req, MethodArgumentNotValidException e) {
-        return logAndGetErrorInfo(req, e, false, DATA_ERROR);
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
