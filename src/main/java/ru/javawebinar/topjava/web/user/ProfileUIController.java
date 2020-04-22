@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,9 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/profile")
 public class ProfileUIController extends AbstractUserController {
+    @Autowired
+    @Qualifier("userToValidator")// spring validator
+    private UserToValidator myCustomValidator;
 
     @GetMapping
     public String profile() {
@@ -23,6 +28,7 @@ public class ProfileUIController extends AbstractUserController {
 
     @PostMapping
     public String updateProfile(@Valid UserTo userTo, BindingResult result, SessionStatus status) {
+        myCustomValidator.validate(userTo, result);
         if (result.hasErrors()) {
             return "profile";
         } else {
@@ -42,6 +48,7 @@ public class ProfileUIController extends AbstractUserController {
 
     @PostMapping("/register")
     public String saveRegister(@Valid UserTo userTo, BindingResult result, SessionStatus status, ModelMap model) {
+        myCustomValidator.validate(userTo, result);
         if (result.hasErrors()) {
             model.addAttribute("register", true);
             return "profile";
