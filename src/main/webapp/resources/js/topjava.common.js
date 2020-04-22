@@ -94,10 +94,17 @@ function successNoty(key) {
 }
 
 function failNoty(jqXHR) {
+//.contains("users_unique_email_idx")
     closeNoty();
     var errorInfo = JSON.parse(jqXHR.responseText);
+    var message;
+    if (errorInfo.detail.includes("users_unique_email_idx")) {
+        message = i18n["user.emailInUse"];
+    } else {
+        message = errorInfo.detail;
+    }
     failedNote = new Noty({
-        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + "<br>" + errorInfo.type + "<br>" + errorInfo.detail,
+        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + "<br>" + "Ошибка в заполнении формы" + "<br>" + message,
         type: "error",
         layout: "bottomRight"
     }).show();
