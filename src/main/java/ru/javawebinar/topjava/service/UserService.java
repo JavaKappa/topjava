@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
     @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void enable(int id, boolean enabled) {
-        User user = get(id);
+        User user = checkNotFoundWithId(get(id), id);
         user.setEnabled(enabled);
         repository.save(user);  // !! need only for JDBC implementation
     }
